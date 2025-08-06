@@ -2,6 +2,7 @@
 import { useRouter } from "next/navigation";
 
 import { authClient } from "@/lib/auth-client";
+import { Button } from "@/components/ui/button";
 
 export const HomeView = () => {
   const router = useRouter();
@@ -13,7 +14,7 @@ export const HomeView = () => {
   return (
     <div className="flex flex-col p-4 gap-y-4">
       <p>Logged in as {session.user.name} </p>
-      <button
+      <Button
         onClick={() =>
           authClient.signOut({
             fetchOptions: {
@@ -23,7 +24,7 @@ export const HomeView = () => {
         }
       >
         Sign out
-      </button>
+      </Button>
     </div>
   );
 };
