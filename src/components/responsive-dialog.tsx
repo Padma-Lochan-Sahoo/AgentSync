@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/drawer"
 
 interface ResponsiveDialogProps {
-    title: String,
+    title: string,
     descriptioin: string,
     children: React.ReactNode,
     open: boolean,
