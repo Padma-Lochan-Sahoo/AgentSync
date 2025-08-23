@@ -22,6 +22,7 @@ import {
   FormMessage,
   FormField,
 } from "@/components/ui/form";
+import { EmailVerificationStep } from "../components/EmailVerificationStep";
 
 const formSchema = z
   .object({
@@ -35,10 +36,14 @@ const formSchema = z
     path: ["confirmPassword"],
   });
 
+
+  type SignUpStep = 'method' | 'email-verification' | 'signup-form';
 export const SignUpView = () => {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
+    const [step, setStep] = useState<SignUpStep>('method');
+  const [verifiedEmail, setVerifiedEmail] = useState('');
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -96,6 +101,109 @@ export const SignUpView = () => {
     );
   };
 
+    const handleEmailVerified = (email: string) => {
+    setVerifiedEmail(email);
+    form.setValue('email', email);
+    setStep('signup-form');
+  };
+
+  // Method selection step
+  if (step === 'method') {
+    return (
+      <div className="flex flex-col gap-6">
+        <Card className="overflow-hidden p-0">
+          <CardContent className="grid p-0 md:grid-cols-2">
+            <div className="p-6 md:p-8">
+              <div className="flex flex-col gap-6">
+                <div className="flex flex-col items-center text-center">
+                  <h1 className="text-2xl font-bold">Create Your Account</h1>
+                  <p className="text-muted-foreground text-balance">
+                    Choose how you'd like to sign up
+                  </p>
+                </div>
+
+                <Button
+                  onClick={() => setStep('email-verification')}
+                  className="w-full h-12"
+                  variant="default"
+                >
+                  Continue with Email
+                </Button>
+
+                <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
+                  <span className="bg-card text-muted-foreground relative z-10 px-2">
+                    Or continue with
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <Button
+                    onClick={() => onSocial("google")}
+                    disabled={pending}
+                    variant="outline"
+                    type="button"
+                    className="w-full h-12"
+                  >
+                    <FaGoogle className="mr-2" />
+                    Google
+                  </Button>
+                  <Button
+                    onClick={() => onSocial("github")}
+                    disabled={pending}
+                    variant="outline"
+                    type="button"
+                    className="w-full h-12"
+                  >
+                    <FaGithub className="mr-2" />
+                    GitHub
+                  </Button>
+                </div>
+
+                <div className="text-center text-sm">
+                  Already have an account?{" "}
+                  <Link
+                    href="/sign-in"
+                    className="underline underline-offset-4"
+                  >
+                    Sign In
+                  </Link>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-radial from-sidebar-accent to-sidebar relative hidden md:flex flex-col gap-y-4 items-center justify-center">
+              <img src="/logo.svg" alt="Image" className="h-[92px] w-[92px]" />
+              <p className="text-2xl font-semibold text-white">AgentSync</p>
+            </div>
+          </CardContent>
+        </Card>
+
+        <div className="text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4">
+          By clicking continue, you agree to our <a href="#">Terms of Services</a>{" "}
+          and <a href="#">Privacy Policy</a>
+        </div>
+      </div>
+    );
+  }
+
+  // Email verification step
+  if (step === 'email-verification') {
+    return (
+      <div className="flex flex-col gap-6">
+        <EmailVerificationStep
+          onVerified={handleEmailVerified}
+          onBack={() => setStep('method')}
+        />
+
+        <div className="text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4">
+          By clicking continue, you agree to our <a href="#">Terms of Services</a>{" "}
+          and <a href="#">Privacy Policy</a>
+        </div>
+      </div>
+    );
+  }
+
+  // Signup form step (after email verification)
   return (
     <div className="flex flex-col gap-6">
       <Card className="overflow-hidden p-0">
@@ -104,9 +212,9 @@ export const SignUpView = () => {
             <form onSubmit={form.handleSubmit(onSubmit)} className="p-6 md:p-8">
               <div className="flex flex-col gap-6">
                 <div className="flex flex-col items-center text-center">
-                  <h1 className="text-2xl font-bold">Let&apos;s get started</h1>
+                  <h1 className="text-2xl font-bold">Complete Your Account</h1>
                   <p className="text-muted-foreground text-balance">
-                    Create Your Account
+                    Email verified ✓ Now set up your profile
                   </p>
                 </div>
 
@@ -118,13 +226,14 @@ export const SignUpView = () => {
                       <FormItem>
                         <FormLabel>Name</FormLabel>
                         <FormControl>
-                          <Input type="text" placeholder="example" {...field} />
+                          <Input type="text" placeholder="John Doe" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
                 </div>
+
                 <div className="grid gap-3">
                   <FormField
                     control={form.control}
@@ -135,8 +244,9 @@ export const SignUpView = () => {
                         <FormControl>
                           <Input
                             type="email"
-                            placeholder="agent@example.com"
                             {...field}
+                            disabled
+                            className="bg-muted"
                           />
                         </FormControl>
                         <FormMessage />
@@ -144,6 +254,7 @@ export const SignUpView = () => {
                     )}
                   />
                 </div>
+
                 <div className="grid gap-3">
                   <FormField
                     control={form.control}
@@ -163,6 +274,7 @@ export const SignUpView = () => {
                     )}
                   />
                 </div>
+
                 <div className="grid gap-3">
                   <FormField
                     control={form.control}
@@ -182,12 +294,14 @@ export const SignUpView = () => {
                     )}
                   />
                 </div>
-                {!!error && (
+
+                {error && (
                   <Alert className="bg-destructive/10 border-none">
                     <OctagonAlertIcon className="h-4 w-4 !text-destructive" />
                     <AlertTitle>{error}</AlertTitle>
                   </Alert>
                 )}
+
                 <Button
                   disabled={form.formState.isSubmitting || pending}
                   type="submit"
@@ -196,42 +310,19 @@ export const SignUpView = () => {
                   {pending ? (
                     <Loader2 className="h-4 w-4 animate-spin" />
                   ) : (
-                    "Sign up"
+                    "Create Account"
                   )}
                 </Button>
-                <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
-                  <span className="bg-card text-muted-foreground relative z-10 px-2">
-                    Or continue With
-                  </span>
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <Button
-                    onClick={() => onSocial("google")}
-                    disabled={pending}
-                    variant="outline"
-                    type="button"
-                    className="w-full"
-                  >
-                      <FaGoogle />
-                  </Button>
-                  <Button
-                    onClick={() => onSocial("github")}
-                    disabled={pending}
-                    variant="outline"
-                    type="button"
-                    className="w-full"
-                  >
-                      <FaGithub />
-                  </Button>
-                </div>
+
                 <div className="text-center text-sm">
-                  Already have an account?{" "}
-                  <Link
-                    href="/sign-in"
+                  Want to use a different email?{" "}
+                  <button
+                    type="button"
+                    onClick={() => setStep('email-verification')}
                     className="underline underline-offset-4"
                   >
-                    Sign In
-                  </Link>
+                    Change Email
+                  </button>
                 </div>
               </div>
             </form>
