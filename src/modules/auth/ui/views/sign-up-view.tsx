@@ -2,11 +2,11 @@
 
 import { z } from "zod";
 import { useForm } from "react-hook-form";
-import { OctagonAlertIcon, Loader2 } from "lucide-react";
+import { OctagonAlertIcon } from "lucide-react";
 import { FaGithub, FaGoogle } from "react-icons/fa";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 import { Input } from "@/components/ui/input";
 import { authClient } from "@/lib/auth-client";
@@ -14,6 +14,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Alert, AlertTitle } from "@/components/ui/alert";
+import { LoadingState } from "@/components/loading-state";
 import {
   Form,
   FormItem,
@@ -22,6 +23,7 @@ import {
   FormMessage,
   FormField,
 } from "@/components/ui/form";
+
 
 const formSchema = z
   .object({
@@ -35,10 +37,12 @@ const formSchema = z
     path: ["confirmPassword"],
   });
 
+
 export const SignUpView = () => {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
+
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -49,11 +53,12 @@ export const SignUpView = () => {
       confirmPassword: "",
     },
   });
-  // Removed problematic useEffect that was interfering with loading state
+
 
   const onSubmit = (data: z.infer<typeof formSchema>) => {
     setError(null);
     setPending(true);
+
 
     authClient.signUp.email(
       {
@@ -64,7 +69,7 @@ export const SignUpView = () => {
       },
       {
         onSuccess: () => {
-          setPending(false);
+          // Don't set pending to false here as we're redirecting
           router.push("/");
         },
         onError: ({ error }) => {
@@ -75,9 +80,11 @@ export const SignUpView = () => {
     );
   };
 
+
   const onSocial = (provider: "github" | "google") => {
     setError(null);
     setPending(true);
+
 
     authClient.signIn.social(
       {
@@ -86,7 +93,8 @@ export const SignUpView = () => {
       },
       {
         onSuccess: () => {
-          setPending(false);
+          // Social auth typically redirects externally
+          // so we might not need to handle success here
         },
         onError: ({ error }) => {
           setPending(false);
@@ -95,6 +103,20 @@ export const SignUpView = () => {
       }
     );
   };
+
+
+  // Show loading state overlay when pending
+  if (pending) {
+    return (
+      <div className="flex flex-col gap-6">
+        <LoadingState
+          title="Creating account..."
+          description="Please wait while we create your account."
+        />
+      </div>
+    );
+  }
+
 
   return (
     <div className="flex flex-col gap-6">
@@ -110,6 +132,7 @@ export const SignUpView = () => {
                   </p>
                 </div>
 
+
                 <div className="grid gap-3">
                   <FormField
                     control={form.control}
@@ -118,7 +141,12 @@ export const SignUpView = () => {
                       <FormItem>
                         <FormLabel>Name</FormLabel>
                         <FormControl>
-                          <Input type="text" placeholder="example" {...field} />
+                          <Input
+                            type="text"
+                            placeholder="example"
+                            disabled={pending}
+                            {...field}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -136,6 +164,7 @@ export const SignUpView = () => {
                           <Input
                             type="email"
                             placeholder="agent@example.com"
+                            disabled={pending}
                             {...field}
                           />
                         </FormControl>
@@ -155,6 +184,7 @@ export const SignUpView = () => {
                           <Input
                             type="password"
                             placeholder="********"
+                            disabled={pending}
                             {...field}
                           />
                         </FormControl>
@@ -174,6 +204,7 @@ export const SignUpView = () => {
                           <Input
                             type="password"
                             placeholder="********"
+                            disabled={pending}
                             {...field}
                           />
                         </FormControl>
@@ -189,15 +220,11 @@ export const SignUpView = () => {
                   </Alert>
                 )}
                 <Button
-                  disabled={form.formState.isSubmitting || pending}
+                  disabled={pending}
                   type="submit"
                   className="w-full"
                 >
-                  {pending ? (
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                  ) : (
-                    "Sign up"
-                  )}
+                  {pending ? "Creating account..." : "Sign up"}
                 </Button>
                 <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
                   <span className="bg-card text-muted-foreground relative z-10 px-2">
@@ -237,12 +264,14 @@ export const SignUpView = () => {
             </form>
           </Form>
 
+
           <div className="bg-radial from-sidebar-accent to-sidebar relative hidden md:flex flex-col gap-y-4 items-center justify-center">
             <img src="/logo.svg" alt="Image" className="h-[92px] w-[92px]" />
             <p className="text-2xl font-semibold text-white">AgentSync</p>
           </div>
         </CardContent>
       </Card>
+
 
       <div className="text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4">
         By clicking continue, you agree to our <a href="#">Terms of Services</a>{" "}
@@ -251,3 +280,10 @@ export const SignUpView = () => {
     </div>
   );
 };
+
+
+
+
+
+
+
