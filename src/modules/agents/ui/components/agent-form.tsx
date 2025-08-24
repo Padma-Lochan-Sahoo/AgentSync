@@ -46,6 +46,24 @@ export const AgentForm = ({
                     trpc.agents.getMany.queryOptions({}),
                 );
 
+                // TODO: Invalidate free tier usage
+                onSuccess?.();
+            },
+            onError: ( error ) => {
+                toast.error(error.message);
+
+                // TODO: check if error code is "FORBIDDEN", redirect to "/upgrade"
+            }
+        }),
+    )
+
+    const updateAgent = useMutation(
+        trpc.agents.update.mutationOptions({
+            onSuccess: async () => {
+                await queryClient.invalidateQueries(
+                    trpc.agents.getMany.queryOptions({}),
+                );
+
                 if(initialValues?.id){
                     await queryClient.invalidateQueries(
                         trpc.agents.getOne.queryOptions({ id: initialValues.id}),
@@ -70,11 +88,14 @@ export const AgentForm = ({
     });
 
     const isEdit = !!initialValues?.id;
-    const isPending = createAgent.isPending;
+    const isPending = createAgent.isPending || updateAgent.isPending;
 
     const onSubmit = (values: z.infer<typeof agentInsertSchema>) => {
         if(isEdit) {
-            console.log("TODO: updateAgent");
+            updateAgent.mutate({
+                id: initialValues.id,
+                ...values
+            })
             
         } else {
             createAgent.mutate(values);
