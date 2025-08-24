@@ -14,6 +14,7 @@ import { authClient } from "@/lib/auth-client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Alert, AlertTitle } from "@/components/ui/alert";
+import { LoadingState } from "@/components/loading-state";
 import {
   Form,
   FormItem,
@@ -54,13 +55,13 @@ export const SignInView = () => {
 
       if (result.error) {
         setError(result.error.message || "Failed to sign in");
+        setPending(false);
         return;
       }
 
       router.push("/");
     } catch (err: any) {
       setError(err.message || "An unexpected error occurred");
-    } finally {
       setPending(false);
     }
   };
@@ -77,14 +78,25 @@ export const SignInView = () => {
 
       if (result.error) {
         setError(result.error.message || "Failed to sign in");
+        setPending(false);
         return;
       }
     } catch (err: any) {
       setError(err.message || "An unexpected error occurred");
-    } finally {
       setPending(false);
     }
   };
+
+  if (pending) {
+    return (
+      <div className="flex flex-col gap-6">
+        <LoadingState 
+          title="Signing in..."
+          description="Please wait while we authenticate your account."
+        />
+      </div>
+    )
+  }
 
   return (
     <div className="flex flex-col gap-6">
@@ -110,6 +122,7 @@ export const SignInView = () => {
                           <Input
                             type="email"
                             placeholder="agent@example.com"
+                            disabled={pending}
                             {...field}
                           />
                         </FormControl>
@@ -129,6 +142,7 @@ export const SignInView = () => {
                           <Input
                             type="password"
                             placeholder="********"
+                            disabled={pending}
                             {...field}
                           />
                         </FormControl>
@@ -144,11 +158,7 @@ export const SignInView = () => {
                   </Alert>
                 )}
                 <Button disabled={pending} type="submit" className="w-full">
-                  {pending ? (
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                  ) : (
-                    "Sign in"
-                  )}
+                  {pending ? "Signing in..." : "Sign in"}
                 </Button>
 
                 <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
