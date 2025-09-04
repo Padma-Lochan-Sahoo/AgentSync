@@ -18,7 +18,7 @@ interface Props {
         children: ReactNode;
     }>;
     onSelect: (value: string) => void;
-    onSearch: (value: string) => void;
+    onSearch?: (value: string) => void;
     value: string;
     placeholder?: string;
     className?: string;
