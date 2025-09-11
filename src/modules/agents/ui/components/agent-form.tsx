@@ -22,6 +22,7 @@ import {
 import { AgentGetOne } from "../../types";
 import { agentInsertSchema } from "../../schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { LoadingButton } from "@/components/loading-button";
 
 
 interface AgentFormProps {
@@ -149,12 +150,13 @@ export const AgentForm = ({
                         </Button>
                     )}
 
-                    <Button
-                        disabled={isPending}
-                        type="submit"
-                    >
-                        {isEdit ? "Update" : "Create"}
-                    </Button>
+                    <LoadingButton
+                                  isLoading={isPending}
+                                  type="submit"
+                                  loadingText={isEdit ? "Update Agent" : "Create Agent"}
+                                >
+                                  {isEdit ? "Update Agent" : "Create Agent"}
+                                </LoadingButton>
                 </div>
             </form>
         </Form>
