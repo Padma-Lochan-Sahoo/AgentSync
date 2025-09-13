@@ -18,8 +18,9 @@ export const meetingsRouter = createTRPCRouter({
         id: ctx.auth.user.id,
         name: ctx.auth.user.name,
         role: "admin",
-        image: ctx.auth.user.image ??
-        generateAvatarUri({ seed: ctx.auth.user.name, variant: "initials"})
+        image: 
+          ctx.auth.user.image ??
+          generateAvatarUri({ seed: ctx.auth.user.name, variant: "initials"})
       }
     ]);
 
@@ -29,7 +30,7 @@ export const meetingsRouter = createTRPCRouter({
       const token = streamVideo.generateUserToken({
         user_id: ctx.auth.user.id,
         exp: expirationTime,
-        validity_in_seconds: issuedAt
+        iat: issuedAt
       });
 
       return token;
