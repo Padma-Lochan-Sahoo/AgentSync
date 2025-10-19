@@ -7,7 +7,6 @@ import { authClient } from "@/lib/auth-client";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { GeneratedAvatar } from "@/components/generated-avatar";
-import { LoadingState } from "@/components/loading-state";
 
 
 import {
@@ -55,6 +54,8 @@ export const DashboardUserButton = () => {
         }
       });
     } catch (error) {
+      console.log(error);
+      
       setIsLoggingOut(false);
     }
   }
@@ -113,7 +114,7 @@ export const DashboardUserButton = () => {
           <DrawerFooter>
             <Button
               variant="outline"
-              onClick={() => {}}
+              onClick={() => authClient.customer.portal()}
               disabled={isLoggingOut}
             >
               <CreditCardIcon className="size-4 text-black"/>
@@ -169,6 +170,7 @@ export const DashboardUserButton = () => {
         <DropdownMenuItem
           className="cursor-pointer flex items-center justify-between"
           disabled={isLoggingOut}
+          onClick={() => authClient.customer.portal()}
         >
           Billing
           <CreditCardIcon className="size-4"/>

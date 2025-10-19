@@ -23,6 +23,7 @@ import { AgentGetOne } from "../../types";
 import { agentInsertSchema } from "../../schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoadingButton } from "@/components/loading-button";
+import { useRouter } from "next/navigation";
 
 
 interface AgentFormProps {
@@ -37,7 +38,7 @@ export const AgentForm = ({
     initialValues,
 }: AgentFormProps) => {
     const trpc = useTRPC();
-
+    const router = useRouter()
     const queryClient = useQueryClient();
 
     const createAgent = useMutation(
@@ -46,14 +47,17 @@ export const AgentForm = ({
                 await queryClient.invalidateQueries(
                     trpc.agents.getMany.queryOptions({}),
                 );
-
-                // TODO: Invalidate free tier usage
+                await queryClient.invalidateQueries(
+                    trpc.premium.getFreeUsage.queryOptions(),
+                );
                 onSuccess?.();
             },
             onError: ( error ) => {
                 toast.error(error.message);
 
-                // TODO: check if error code is "FORBIDDEN", redirect to "/upgrade"
+                if(error.data?.code === "FORBIDDEN") {
+                    router.push("/upgrade");
+                }
             }
         }),
     )
@@ -74,8 +78,6 @@ export const AgentForm = ({
             },
             onError: ( error ) => {
                 toast.error(error.message);
-
-                // TODO: check if error code is "FORBIDDEN", redirect to "/upgrade"
             }
         }),
     )
