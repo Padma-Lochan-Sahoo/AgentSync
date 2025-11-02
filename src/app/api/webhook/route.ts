@@ -98,15 +98,17 @@ export async function POST(req: NextRequest) {
         }
 
         const call = streamVideo.video.call("default", meetingId);
-
+console.log("Connecting OpenAI Realtime Agent:", existingAgent.name);
         const realtimeClient = await streamVideo.video.connectOpenAi({
             call,
             openAiApiKey: process.env.OPENAI_API_KEY!,
             agentUserId: existingAgent.id,
+            model: "gpt-4o-realtime-preview", // Important: use a realtime model
         });
+        console.log("Realtime client connected:", realtimeClient.session_id);
 
         realtimeClient.updateSession({
-            instructions: existingAgent.instructions,
+            instructions: existingAgent.instructions||"You are a friendly AI gym trainer. Speak clearly and interact naturally with the user.",
         });
     } else if(eventType === "call.session_participant_left"){
         const event = payload as CallSessionParticipantLeftEvent;

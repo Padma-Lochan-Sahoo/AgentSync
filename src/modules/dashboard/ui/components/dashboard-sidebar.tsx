@@ -3,7 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { VideoIcon, BotIcon, StarIcon } from "lucide-react";
+import { VideoIcon, BotIcon } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/sidebar";
 import { Separator } from "@/components/ui/separator";
 import { DashboardUserButton } from "./dashboard-user-button";
-import { DashboardTrial } from "./dashboard-trial";
+// import { DashboardTrial } from "./dashboard-trial";
 
 const firstSection = [
   {
@@ -32,13 +32,13 @@ const firstSection = [
   },
 ];
 
-const secondSection = [
-  {
-    icon: StarIcon,
-    label: "Upgrade",
-    href: "/upgrade",
-  },
-];
+// const secondSection = [
+//   {
+//     icon: StarIcon,
+//     label: "Upgrade",
+//     href: "/upgrade",
+//   },
+// ];
 
 export const DashboardSidebar = () => {
   const pathname = usePathname();
@@ -90,7 +90,7 @@ export const DashboardSidebar = () => {
         <div className="px-4 py-2">
           <Separator className="opacity-10 text-[#5D6B68]" />
         </div>
-        <SidebarGroup>
+        {/* <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
               {secondSection.map((item) => (
@@ -115,11 +115,11 @@ export const DashboardSidebar = () => {
               ))}
             </SidebarMenu>
           </SidebarGroupContent>
-        </SidebarGroup>
+        </SidebarGroup> */}
       </SidebarContent>
 
       <SidebarFooter className="text-white">
-<DashboardTrial />
+{/* <DashboardTrial /> */}
 <DashboardUserButton/>
       </SidebarFooter>
     </Sidebar>

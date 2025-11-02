@@ -54,6 +54,7 @@
     "@trpc/server": "^11.1.2",
     "@trpc/tanstack-react-query": "^11.1.2",
     "better-auth": "^1.2.8",
+    "bufferutil": "^4.0.9",
     "class-variance-authority": "^0.7.1",
     "client-only": "^0.0.1",
     "clsx": "^2.1.1",
@@ -87,7 +88,9 @@
     "stream-chat": "^9.24.0",
     "stream-chat-react": "^13.9.0",
     "tailwind-merge": "^3.3.1",
+    "utf-8-validate": "^6.0.5",
     "vaul": "^1.1.2",
+    "ws": "^8.18.3",
     "zod": "^3.24.4"
   },
   "devDependencies": {
