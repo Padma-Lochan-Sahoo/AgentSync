@@ -3,7 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { VideoIcon, BotIcon } from "lucide-react";
+import { VideoIcon, BotIcon, MessageSquare } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -29,6 +29,11 @@ const firstSection = [
     icon: BotIcon,
     label: "Agents",
     href: "/agents",
+  },
+  {
+    icon: MessageSquare,
+    label: "Chatbot",
+    href: "/chatbot",
   },
 ];
 

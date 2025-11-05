@@ -88,3 +88,30 @@ export const meetings = pgTable("meetings",{
     createdAt: timestamp("created_at").notNull().defaultNow(),
     updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });
+
+export const chats = pgTable("chats", {
+    id: text("id")
+        .primaryKey()
+        .$defaultFn(() => nanoid()),
+    userId: text("user_id")
+        .notNull()
+        .references(() => user.id, { onDelete: "cascade" }),
+    agentId: text("agent_id")
+        .notNull()
+        .references(() => agents.id, { onDelete: "cascade" }),
+    title: text("title"),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+    updatedAt: timestamp("updated_at").notNull().defaultNow(),
+});
+
+export const chatMessages = pgTable("chat_messages", {
+    id: text("id")
+        .primaryKey()
+        .$defaultFn(() => nanoid()),
+    chatId: text("chat_id")
+        .notNull()
+        .references(() => chats.id, { onDelete: "cascade" }),
+    role: text("role").notNull(), // "user" or "assistant"
+    content: text("content").notNull(),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+});
