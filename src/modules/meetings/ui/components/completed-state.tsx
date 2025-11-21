@@ -35,13 +35,13 @@ export const CompletedState = ({ data }: Props) => {
                                 <FileTextIcon />
                                 Transcript
                             </TabsTrigger>
-                            <TabsTrigger 
+                            {/* <TabsTrigger 
                                 value="recording"
                                 className="text-muted-foreground rounded-none bg-background data-[state=active]:shadow-none border-b-2 border-transparent data-[state=active]:border-b-primary data-[state=active]:text-accent-foreground h-full hover:text-accent-foreground"
                             >
                                 <FileVideoIcon />
                                 Recording
-                            </TabsTrigger>
+                            </TabsTrigger> */}
                             <TabsTrigger 
                                 value="chat"
                                 className="text-muted-foreground rounded-none bg-background data-[state=active]:shadow-none border-b-2 border-transparent data-[state=active]:border-b-primary data-[state=active]:text-accent-foreground h-full hover:text-accent-foreground"
