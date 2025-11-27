@@ -5,7 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { format } from "date-fns";
 import { GeneratedAvatar } from "@/components/generated-avatar";
 import { MeetingGetOne } from "../../types"
-import { BookOpenTextIcon, ClockFadingIcon, FileTextIcon, FileVideoIcon, SparklesIcon } from "lucide-react";
+import { BookOpenTextIcon, ClockFadingIcon, FileTextIcon, SparklesIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { formatDuration } from "@/lib/utils";
 import { Transcript } from "./transcript";

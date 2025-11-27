@@ -7,7 +7,7 @@ import { agents, chats, chatMessages } from "@/db/schema";
 import { createTRPCRouter, protectedProcedure } from "@/trpc/init";
 import { chatCreateSchema, chatMessageCreateSchema, chatUpdateSchema } from "../schemas";
 import { TRPCError } from "@trpc/server";
-import { generateAvatarUri } from "@/lib/avatar";
+// import { generateAvatarUri } from "@/lib/avatar";
 
 const openaiClient = new OpenAI({ apiKey: process.env.OPENAI_API_KEY! });
 

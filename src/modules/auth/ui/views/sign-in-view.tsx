@@ -2,8 +2,8 @@
 
 import { z } from "zod";
 import { useForm } from "react-hook-form";
-import { OctagonAlertIcon, Loader2 } from "lucide-react";
-import { FaGithub, FaGoogle } from "react-icons/fa";
+import { OctagonAlertIcon } from "lucide-react";
+// import { FaGithub, FaGoogle } from "react-icons/fa";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -60,32 +60,32 @@ export const SignInView = () => {
       }
 
       router.push("/");
-    } catch (err: any) {
-      setError(err.message || "An unexpected error occurred");
+    } catch (err) {
+      setError(`An unexpected error occurred ${err}`);
       setPending(false);
     }
   };
 
-  const onSocial = async (provider: "github" | "google") => {
-    setError(null);
-    setPending(true);
+  // const onSocial = async (provider: "github" | "google") => {
+  //   setError(null);
+  //   setPending(true);
 
-    try {
-      const result = await authClient.signIn.social({
-        provider,
-        callbackURL: "/",
-      });
+  //   try {
+  //     const result = await authClient.signIn.social({
+  //       provider,
+  //       callbackURL: "/",
+  //     });
 
-      if (result.error) {
-        setError(result.error.message || "Failed to sign in");
-        setPending(false);
-        return;
-      }
-    } catch (err: any) {
-      setError(err.message || "An unexpected error occurred");
-      setPending(false);
-    }
-  };
+  //     if (result.error) {
+  //       setError(result.error.message || "Failed to sign in");
+  //       setPending(false);
+  //       return;
+  //     }
+  //   } catch (err: any) {
+  //     setError(err.message || "An unexpected error occurred");
+  //     setPending(false);
+  //   }
+  // };
 
   if (pending) {
     return (

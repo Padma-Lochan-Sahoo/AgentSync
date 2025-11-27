@@ -3,7 +3,7 @@
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { OctagonAlertIcon } from "lucide-react";
-import { FaGithub, FaGoogle } from "react-icons/fa";
+// import { FaGithub, FaGoogle } from "react-icons/fa";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useState } from "react";
@@ -81,28 +81,28 @@ export const SignUpView = () => {
   };
 
 
-  const onSocial = (provider: "github" | "google") => {
-    setError(null);
-    setPending(true);
+  // const onSocial = (provider: "github" | "google") => {
+  //   setError(null);
+  //   setPending(true);
 
 
-    authClient.signIn.social(
-      {
-        provider: provider,
-        callbackURL: "/",
-      },
-      {
-        onSuccess: () => {
-          // Social auth typically redirects externally
-          // so we might not need to handle success here
-        },
-        onError: ({ error }) => {
-          setPending(false);
-          setError(error.message);
-        },
-      }
-    );
-  };
+  //   authClient.signIn.social(
+  //     {
+  //       provider: provider,
+  //       callbackURL: "/",
+  //     },
+  //     {
+  //       onSuccess: () => {
+  //         // Social auth typically redirects externally
+  //         // so we might not need to handle success here
+  //       },
+  //       onError: ({ error }) => {
+  //         setPending(false);
+  //         setError(error.message);
+  //       },
+  //     }
+  //   );
+  // };
 
 
   // Show loading state overlay when pending

@@ -174,9 +174,9 @@ export const ChatbotView = () => {
         queryKey: [["chatbot", "getMessages"]],
       });
       toast.success("Chat deleted successfully");
-    } catch (error: any) {
+    } catch (error) {
       console.error("Failed to delete chat:", error);
-      toast.error(error.message || "Failed to delete chat");
+      toast.error(`Failed to delete chat, ${error}`);
     } finally {
       setDeletingChatId(null);
     }
@@ -219,13 +219,13 @@ export const ChatbotView = () => {
           />
           <div className="flex-1 flex flex-col min-h-0">
             {isLoadingChat || isLoadingMessages ? (
-              <LoadingState title="Loading chat..." />
+              <LoadingState title="Loading chat..." description="It take some time"/>
             ) : (
               <ChatMessages
                 messages={messagesData?.items || []}
                 agentName={currentChat?.agent.name}
                 userName={session?.user.name}
-                userImage={session?.user.image}
+                userImage={session?.user.image || "guest"}
               />
             )}
             <ChatInput

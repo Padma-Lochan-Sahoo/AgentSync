@@ -1,4 +1,4 @@
-import { AlertCircle } from "lucide-react";
+// import { AlertCircle } from "lucide-react";
 import Image from "next/image";
 
 interface Props {
