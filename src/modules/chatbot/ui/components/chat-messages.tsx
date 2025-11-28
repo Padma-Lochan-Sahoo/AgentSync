@@ -6,6 +6,17 @@ import { generateAvatarUri } from "@/lib/avatar";
 import Image from "next/image";
 import { BotIcon, UserIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
+import Markdown from "react-markdown";
+
+// Helper function to validate URLs
+const isValidUrl = (url: string): boolean => {
+  try {
+    new URL(url);
+    return true;
+  } catch {
+    return false;
+  }
+};
 
 interface ChatMessagesProps {
   messages: ChatMessage[];
@@ -72,9 +83,83 @@ export const ChatMessages = ({
                   : "bg-muted text-foreground"
               )}
             >
-              <p className="text-sm whitespace-pre-wrap break-words">
-                {message.content}
-              </p>
+              {isUser ? (
+                <p className="text-sm whitespace-pre-wrap break-words">
+                  {message.content}
+                </p>
+              ) : (
+                <div className="text-sm max-w-none">
+                  <Markdown
+                    components={{
+                      p: (props) => (
+                        <p className="mb-2 last:mb-0 leading-relaxed" {...props} />
+                      ),
+                      h1: (props) => (
+                        <h1 className="text-lg font-semibold mb-2 mt-3 first:mt-0" {...props} />
+                      ),
+                      h2: (props) => (
+                        <h2 className="text-base font-semibold mb-2 mt-3 first:mt-0" {...props} />
+                      ),
+                      h3: (props) => (
+                        <h3 className="text-sm font-semibold mb-2 mt-3 first:mt-0" {...props} />
+                      ),
+                      ul: (props) => (
+                        <ul className="list-disc list-inside mb-2 space-y-1" {...props} />
+                      ),
+                      ol: (props) => (
+                        <ol className="list-decimal list-inside mb-2 space-y-1" {...props} />
+                      ),
+                      li: (props) => (
+                        <li className="ml-2" {...props} />
+                      ),
+                      strong: (props) => (
+                        <strong className="font-semibold" {...props} />
+                      ),
+                      em: (props) => (
+                        <em className="italic" {...props} />
+                      ),
+                      code: (props) => {
+                        const { className, children, ...rest } = props;
+                        const isInline = !className;
+                        return isInline ? (
+                          <code
+                            className="bg-muted-foreground/20 px-1 py-0.5 rounded text-xs font-mono"
+                            {...rest}
+                          >
+                            {children}
+                          </code>
+                        ) : (
+                          <code
+                            className="block bg-muted-foreground/20 p-2 rounded text-xs font-mono overflow-x-auto mb-2"
+                            {...rest}
+                          >
+                            {children}
+                          </code>
+                        );
+                      },
+                      pre: (props) => (
+                        <pre className="bg-muted-foreground/20 p-2 rounded text-xs font-mono overflow-x-auto mb-2" {...props} />
+                      ),
+                      blockquote: (props) => (
+                        <blockquote className="border-l-4 border-muted-foreground/30 pl-3 italic my-2" {...props} />
+                      ),
+                      a: (props) => (
+                        <a
+                          className="text-primary underline hover:text-primary/80"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          {...props}
+                        />
+                      ),
+                      hr: (props) => (
+                        <hr className="my-3 border-muted-foreground/30" {...props} />
+                      ),
+                    }}
+                  >
+                    {message.content}
+                  </Markdown>
+                </div>
+              )}
               <p className="text-xs mt-1 opacity-70">
                 {new Date(message.createdAt).toLocaleTimeString([], {
                   hour: "2-digit",
@@ -84,10 +169,10 @@ export const ChatMessages = ({
             </div>
             {isUser && (
               <div className="flex-shrink-0">
-                {userImage ? (
+                {userImage && isValidUrl(userImage) ? (
                   <Image
                     src={userImage}
-                    alt={userName}
+                    alt={userName || "User"}
                     width={32}
                     height={32}
                     className="rounded-full"

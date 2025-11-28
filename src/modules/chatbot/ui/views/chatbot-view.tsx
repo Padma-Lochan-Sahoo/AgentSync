@@ -225,7 +225,7 @@ export const ChatbotView = () => {
                 messages={messagesData?.items || []}
                 agentName={currentChat?.agent.name}
                 userName={session?.user.name}
-                userImage={session?.user.image || "guest"}
+                userImage={session?.user.image || undefined}
               />
             )}
             <ChatInput
