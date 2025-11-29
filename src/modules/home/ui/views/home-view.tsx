@@ -105,12 +105,12 @@ export const HomeView = () => {
         <p className="text-lg text-muted-foreground mb-8 max-w-2xl">
           Manage your AI agents, schedule meetings, and chat with intelligent assistants all in one place.
         </p>
-        <button 
+        {/* <button 
           onClick={() => handleNavigation("/agents")}
           className="px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors"
         >
           Get Started
-        </button>
+        </button> */}
       </div>
 
       {/* Stats Cards */}
@@ -211,13 +211,13 @@ export const HomeView = () => {
         <p className="text-muted-foreground mb-8 max-w-xl mx-auto">
           Start managing AI agents and scheduling intelligent meetings today.
         </p>
-        <button 
+        {/* <button 
           onClick={() => handleNavigation("/agents")}
           className="px-8 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors inline-flex items-center gap-2"
         >
           <Zap className="w-4 h-4" />
           Start Now
-        </button>
+        </button> */}
       </div>
     </div>
   );

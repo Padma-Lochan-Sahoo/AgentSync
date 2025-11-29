@@ -7,16 +7,7 @@ import Image from "next/image";
 import { BotIcon, UserIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Markdown from "react-markdown";
-
-// Helper function to validate URLs
-const isValidUrl = (url: string): boolean => {
-  try {
-    new URL(url);
-    return true;
-  } catch {
-    return false;
-  }
-};
+import { isValidUrl } from "@/lib/url-utils";
 
 interface ChatMessagesProps {
   messages: ChatMessage[];
